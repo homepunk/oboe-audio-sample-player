@@ -6,24 +6,49 @@
 #define AUDIO_FREQUENCY_FILTER_AUDIOENGINE_H
 
 
+#include <oboe/AudioStreamCallback.h>
+#include <oboe/AudioStreamBuilder.h>
 #include "AudioFile.h"
+#include "../../lib-oboe/samples/hello-oboe/src/main/cpp/HelloOboeEngine.h"
+#include "../decoder/WavDecoder.h"
 
-class AudioEngine {
+class AudioEngine : oboe::AudioStreamCallback {
 public:
-    void add(int index, AudiFile file);
+    AudioEngine();
 
-    void play(int index, AudiFile file);
+    ~AudioEngine();
 
-    void play_together(int indexes[]);
+    void load(const char **filePaths, int nbFilePaths);
 
-    void play_sequentially(int indexes[]);
+    void play(int id);
 
-    void pause(int indexes[]);
+    oboe::DataCallbackResult
+    onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames);
 
-    void stop(int indexes[]);
+    void onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result error);
 
 private:
-//    todo: setup audio files array
+    oboe::AudioStream *mPlayStream;
+
+    oboe::AudioApi mAudioApi = oboe::AudioApi::Unspecified;
+    int32_t mPlaybackDeviceId = oboe::kUnspecified;
+    int32_t mChannelCount = 2;
+
+    int32_t mFramesPerBurst;
+    int32_t mBufferSizeSelection = kBufferSizeAutomatic;
+
+    std::unique_ptr<oboe::LatencyTuner> mLatencyTuner;
+    std::mutex mRestartingLock;
+
+    WavDecoder *wavDecoder;
+
+    void setUpPlaybackStream();
+
+    void setupAudioStreamBuilder(oboe::AudioStreamBuilder *builder);
+
+    void restartStream();
+
+    void closeOutputStream();
 };
 
 

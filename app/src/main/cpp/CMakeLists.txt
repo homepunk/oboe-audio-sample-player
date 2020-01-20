@@ -12,6 +12,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # completing its build.
 ### INCLUDE OBOE LIBRARY ###
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror")
 # Set the path to the Oboe library directory (may not exist yet)
 set(OBOE_RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../lib-oboe)
 
@@ -53,6 +54,8 @@ add_library( # Sets the name of the library.
         engine/AudioFile.h
         engine/AudioEngine.cpp
         engine/AudioEngine.h
+        decoder/WavDecoder.cpp
+        decoder/WavDecoder.h
         util/Logger.cpp
         util/Logger.h
         )
@@ -77,6 +80,7 @@ find_library( # Sets the name of the path variable.
 target_link_libraries( # Specifies the target library.
         native-lib
         oboe
+        android
 
         # Links the target library to the log library
         # included in the NDK.

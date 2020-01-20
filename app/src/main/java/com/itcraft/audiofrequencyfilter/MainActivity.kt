@@ -2,10 +2,11 @@ package com.itcraft.audiofrequencyfilter
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.itcraft.audiofrequencyfilter.bridge.NativeAudioEngineBridge
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val jniBridge = NativeLibBridge()
+    private val jniBridge = NativeAudioEngineBridge()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
