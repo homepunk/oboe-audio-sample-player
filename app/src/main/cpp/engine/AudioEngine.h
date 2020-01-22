@@ -8,9 +8,13 @@
 
 #include <oboe/AudioStreamCallback.h>
 #include <oboe/AudioStreamBuilder.h>
+#include <mutex>
+#include <oboe/LatencyTuner.h>
+#include <string>
 #include "AudioFile.h"
-#include "../../lib-oboe/samples/hello-oboe/src/main/cpp/HelloOboeEngine.h"
 #include "../decoder/WavDecoder.h"
+
+constexpr int32_t kBufferSizeAutomatic = 0;
 
 class AudioEngine : oboe::AudioStreamCallback {
 public:
@@ -18,9 +22,9 @@ public:
 
     ~AudioEngine();
 
-    void load(const char **filePaths, int nbFilePaths);
+    void load(const char *filePath);
 
-    void play(int id);
+    void play();
 
     oboe::DataCallbackResult
     onAudioReady(oboe::AudioStream *audioStream, void *audioData, int32_t numFrames);
@@ -34,17 +38,15 @@ private:
     int32_t mPlaybackDeviceId = oboe::kUnspecified;
     int32_t mChannelCount = 2;
 
-    int32_t mFramesPerBurst;
-    int32_t mBufferSizeSelection = kBufferSizeAutomatic;
-
+//    int32_t mFramesPerBurst;
+//    int32_t mBufferSizeSelection = kBufferSizeAutomatic;
+//
     std::unique_ptr<oboe::LatencyTuner> mLatencyTuner;
     std::mutex mRestartingLock;
 
     WavDecoder *wavDecoder;
 
     void setUpPlaybackStream();
-
-    void setupAudioStreamBuilder(oboe::AudioStreamBuilder *builder);
 
     void restartStream();
 

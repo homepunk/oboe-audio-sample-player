@@ -13,8 +13,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Example of a call to a native method
-        sample_text.text = jniBridge.stringFromJNI()
-        jniBridge.logToJNI("Hi from Android")
+//        sample_text.text = jniBridge.stringFromJNI()
+//        jniBridge.logToJNI("Hi from Android")
+
+        jniBridge.loadFromAssets(this, "dpm_shape_of_you_a_melody_01.wav")
+
+        btn_play.setOnClickListener {
+            jniBridge.play(0)
+        }
     }
 
 }

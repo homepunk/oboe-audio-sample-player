@@ -9,11 +9,21 @@
 
 class WavDecoder {
 public:
-    void render(int16_t *buffer, int channel, int32_t channelStride, int32_t numFrames);
-
     void render(float *buffer, int channel, int32_t channelStride, int32_t numFrames);
 
-    const void load(const char **filePaths, int nbFilePaths);
+    void load(const char *filePath);
+
+    void play();
+
+private:
+    int16_t *buffers;
+    long size;
+    int currentPositionL;
+    int currentPositionR;
+
+    bool isLoaded = false;
+
+    long extractWav(const char *filePath);
 
 };
 
